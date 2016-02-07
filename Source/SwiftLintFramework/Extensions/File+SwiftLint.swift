@@ -18,7 +18,7 @@ internal func regex(pattern: String) -> NSRegularExpression {
 }
 
 extension File {
-    public func regions() -> [Region] {
+    internal func regions() -> [Region] {
         var regions = [Region]()
         var disabledRules = Set<String>()
         let commands = self.commands()
@@ -65,7 +65,7 @@ extension File {
         return Location(file: path, line: nextLine, character: nextCharacter)
     }
 
-    public func matchPattern(pattern: String,
+    internal func matchPattern(pattern: String,
                              withSyntaxKinds syntaxKinds: [SyntaxKind]) -> [NSRange] {
         return matchPattern(pattern).filter { _, kindsInRange in
             return kindsInRange.count == syntaxKinds.count &&
@@ -73,11 +73,11 @@ extension File {
         }.map { $0.0 }
     }
 
-    public func matchPattern(pattern: String) -> [(NSRange, [SyntaxKind])] {
+    internal func matchPattern(pattern: String) -> [(NSRange, [SyntaxKind])] {
         return matchPattern(regex(pattern))
     }
 
-    public func matchPattern(regex: NSRegularExpression) -> [(NSRange, [SyntaxKind])] {
+    internal func matchPattern(regex: NSRegularExpression) -> [(NSRange, [SyntaxKind])] {
         let contents = self.contents as NSString
         let range = NSRange(location: 0, length: contents.length)
         let syntax = syntaxMap
@@ -131,7 +131,7 @@ extension File {
     - returns: An array of [NSRange] objects consisting of regex matches inside
     file contents.
     */
-    public func matchPattern(pattern: String,
+    internal func matchPattern(pattern: String,
                              excludingSyntaxKinds syntaxKinds: [SyntaxKind]) -> [NSRange] {
         return matchPattern(pattern).filter {
             $0.1.filter(syntaxKinds.contains).isEmpty
@@ -154,7 +154,7 @@ extension File {
         return matches.filter { !$0.intersectsRanges(exclusionRanges) }
     }
 
-    public func validateVariableName(dictionary: [String: SourceKitRepresentable],
+    internal func validateVariableName(dictionary: [String: SourceKitRepresentable],
                                      kind: SwiftDeclarationKind) -> (name: String, offset: Int)? {
         guard let name = dictionary["key.name"] as? String,
             offset = (dictionary["key.offset"] as? Int64).flatMap({ Int($0) }) where
@@ -164,7 +164,7 @@ extension File {
         return (name.nameStrippingLeadingUnderscoreIfPrivate(dictionary), offset)
     }
 
-    public func append(string: String) {
+    internal func append(string: String) {
         guard let stringData = string.dataUsingEncoding(NSUTF8StringEncoding) else {
             fatalError("can't encode '\(string)' with UTF8")
         }
@@ -178,7 +178,7 @@ extension File {
         lines = contents.lines()
     }
 
-    public func write(string: String) {
+    internal func write(string: String) {
         guard let path = path else {
             fatalError("file needs a path to call write(_:)")
         }
