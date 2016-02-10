@@ -44,6 +44,9 @@
   [JP Simard](https://github.com/jpsim)
   [#120](https://github.com/realm/SwiftLint/issues/120)
 
+* Improve performance of `ColonRule`.  
+  [Norio Nomura](https://github.com/norio-nomura)
+
 ##### Bug Fixes
 
 * Fix case sensitivity of keywords for `valid_docs`.  
